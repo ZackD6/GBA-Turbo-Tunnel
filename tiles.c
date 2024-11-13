@@ -4,11 +4,11 @@
  */
 
 /* include the image we are using */
-#include "battletoads-reduced-color.h"
+#include "battletoads_reduced_color.h"
 
 /* include the tile map we are using */
-#include "turbo-tunnel-background.h"
-#include "turbo-tunnel-road.h"
+#include "turbo_tunnel_background.h"
+#include "turbo_tunnel_road.h"
 
 /* the width and height of the screen */
 #define WIDTH 240
@@ -113,13 +113,13 @@ void setup_background() {
 
     /* load the palette from the image into palette memory*/
     for (int i = 0; i < PALETTE_SIZE; i++) {
-        bg_palette[i] = background_palette[i];
+        bg_palette[i] = battletoads_reduced_color_palette[i];
     }
 
     /* load the image into char block 0 (16 bits at a time) */
     volatile unsigned short* dest = char_block(0);
-    unsigned short* image = (unsigned short*) background_data;
-    for (int i = 0; i < ((background_width * background_height) / 2); i++) {
+    unsigned short* image = (unsigned short*) battletoads_reduced_color_data;
+    for (int i = 0; i < ((battletoads_reduced_color_width * battletoads_reduced_color_height) / 2); i++) {
         dest[i] = image[i];
     }
 
@@ -141,12 +141,12 @@ void setup_background() {
 
     /* load the tile data into screen block 16 */
     dest = screen_block(16);
-    for (int i = 0; i < (map_width * map_height); i++) {
-        dest[i] = map[i];
+    for (int i = 0; i < (turbo_tunnel_background_width * turbo_tunnel_background_height); i++) {
+        dest[i] = turbo_tunnel_background[i];
     }
     dest = screen_block(24);
-    for (int i = 0; i < (map2_width * map2_height); i++) {
-        dest[i] = map2[i];
+    for (int i = 0; i < (turbo_tunnel_road_width * turbo_tunnel_road_height); i++) {
+        dest[i] = turbo_tunnel_road[i];
     }
 }
 
@@ -175,19 +175,19 @@ int main() {
         /* scroll with the arrow keys */
         if (button_pressed(BUTTON_DOWN)) {
             yscroll++;
-            yscroll2 += 2;
+            yscroll2 += 1;
         }
         if (button_pressed(BUTTON_UP)) {
             yscroll--;
-            yscroll2 -= 2;
+            yscroll2 -= 1;
         }
         if (button_pressed(BUTTON_RIGHT)) {
             xscroll++;
-            xscroll2 += 2;
+            xscroll2 += 1;
         }
         if (button_pressed(BUTTON_LEFT)) {
             xscroll--;
-            xscroll2 -= 2;
+            xscroll2 -= 1;
         }
 
         /* wait for vblank before scrolling */
