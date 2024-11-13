@@ -4,7 +4,7 @@
  */
 
 /* include the image we are using */
-#include "battletoads_reduced_color.h"
+#include "battletoads_pink_bg.h"
 
 /* include the tile map we are using */
 #include "turbo_tunnel_background.h"
@@ -113,13 +113,13 @@ void setup_background() {
 
     /* load the palette from the image into palette memory*/
     for (int i = 0; i < PALETTE_SIZE; i++) {
-        bg_palette[i] = battletoads_reduced_color_palette[i];
+        bg_palette[i] = battletoads_pink_bg_palette[i];
     }
 
     /* load the image into char block 0 (16 bits at a time) */
     volatile unsigned short* dest = char_block(0);
-    unsigned short* image = (unsigned short*) battletoads_reduced_color_data;
-    for (int i = 0; i < ((battletoads_reduced_color_width * battletoads_reduced_color_height) / 2); i++) {
+    unsigned short* image = (unsigned short*) battletoads_pink_bg_data;
+    for (int i = 0; i < ((battletoads_pink_bg_width * battletoads_pink_bg_height) / 2); i++) {
         dest[i] = image[i];
     }
 
@@ -141,9 +141,9 @@ void setup_background() {
 
     /* load the tile data into screen block 16 */
     dest = screen_block(16);
-    /*for (int i = 0; i < (turbo_tunnel_background_width * turbo_tunnel_background_height); i++) {
+    for (int i = 0; i < (turbo_tunnel_background_width * turbo_tunnel_background_height); i++) {
         dest[i] = turbo_tunnel_background[i];
-    }*/
+    }
     dest = screen_block(24);
     for (int i = 0; i < (turbo_tunnel_road_width * turbo_tunnel_road_height); i++) {
         dest[i] = turbo_tunnel_road[i];
