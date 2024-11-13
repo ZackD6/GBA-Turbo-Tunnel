@@ -141,9 +141,9 @@ void setup_background() {
 
     /* load the tile data into screen block 16 */
     dest = screen_block(16);
-    for (int i = 0; i < (turbo_tunnel_background_width * turbo_tunnel_background_height); i++) {
+    /*for (int i = 0; i < (turbo_tunnel_background_width * turbo_tunnel_background_height); i++) {
         dest[i] = turbo_tunnel_background[i];
-    }
+    }*/
     dest = screen_block(24);
     for (int i = 0; i < (turbo_tunnel_road_width * turbo_tunnel_road_height); i++) {
         dest[i] = turbo_tunnel_road[i];
