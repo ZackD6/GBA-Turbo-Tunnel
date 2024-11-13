@@ -1,0 +1,9 @@
+1: render background, ground, and battletoad
+2: make the toad move and jump
+3: make the toad move forward constantly
+4: make normal walls, half-walls, and floating walls exist
+6: make normal walls, half-wall, and floating walls flash a warning
+7: make ramps and pits exist (without warnings)
+8: make the toad die when it runs into a wall or falls into a pit
+9: animate the toad jumping and dying
+10: import the music and sound effects that will play
