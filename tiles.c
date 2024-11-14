@@ -7,8 +7,8 @@
 #include "battletoads_pink_bg.h"
 
 /* include the tile map we are using */
-#include "turbo_tunnel_background.h"
-#include "turbo_tunnel_road.h"
+#include "level_wall.h"
+#include "level_road.h"
 
 /* the width and height of the screen */
 #define WIDTH 240
@@ -141,12 +141,12 @@ void setup_background() {
 
     /* load the tile data into screen block 16 */
     dest = screen_block(16);
-    for (int i = 0; i < (turbo_tunnel_background_width * turbo_tunnel_background_height); i++) {
-        dest[i] = turbo_tunnel_background[i];
+    for (int i = 0; i < (level_wall_width * level_wall_height); i++) {
+        dest[i] = level_wall[i];
     }
     dest = screen_block(24);
-    for (int i = 0; i < (turbo_tunnel_road_width * turbo_tunnel_road_height); i++) {
-        dest[i] = turbo_tunnel_road[i];
+    for (int i = 0; i < (level_road_width * level_road_height); i++) {
+        dest[i] = level_road[i];
     }
 }
 
