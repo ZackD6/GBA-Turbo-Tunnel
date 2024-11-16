@@ -155,14 +155,14 @@ void setup_background() {
             (battletoads_pink_bg_width * battletoads_pink_bg_height) / 2);
 
     /* set all control the bits in this register */
-    *bg0_control = 0 |    /* priority, 0 is highest, 3 is lowest */
+    *bg0_control = 3 |    /* priority, 0 is highest, 3 is lowest */
         (0 << 2)  |       /* the char block the image data is stored in */
         (0 << 6)  |       /* the mosaic flag */
         (1 << 7)  |       /* color mode, 0 is 16 colors, 1 is 256 colors */
         (16 << 8) |       /* the screen block the tile data is stored in */
         (1 << 13) |       /* wrapping flag */
         (0 << 14);        /* bg size, 0 is 256x256 */
-    *bg1_control = 0 |    /* priority, 0 is highest, 3 is lowest */
+    *bg1_control = 3 |    /* priority, 0 is highest, 3 is lowest */
         (0 << 2)  |       /* the char block the image data is stored in */
         (0 << 6)  |       /* the mosaic flag */
         (1 << 7)  |       /* color mode, 0 is 16 colors, 1 is 256 colors */
@@ -395,10 +395,10 @@ void koopa_init(struct Koopa* koopa) {
 
 /*initialize the wall*/
 void wall_init(struct Wall* wall){
-    wall->x = 100;
-    wall->y = 50;
+    wall->x = 210;
+    wall->y = 88;
     wall->frame = 0;
-    wall->sprite = sprite_init(wall->x, wall->y, SIZE_64_32, 0, 0, wall->frame, 0);
+    wall->sprite = sprite_init(wall->x, wall->y, SIZE_64_32, 0, 0, wall->frame, 2);
 }
 /* move the koopa left or right returns if it is at edge of the screen */
 int koopa_left(struct Koopa* koopa) {
