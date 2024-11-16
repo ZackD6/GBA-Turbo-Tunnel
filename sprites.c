@@ -12,6 +12,7 @@
 /* include the sprite images we are using */
 #include "wall_obstacle.h"
 #include "battletoads_main_scooter.h"
+#include "wall.h"
 
 /* include the tile map we are using */
 #include "level_road.h"
@@ -136,6 +137,11 @@ void memcpy16_dma(unsigned short* dest, unsigned short* source, int amount) {
     *dma_source = (unsigned int) source;
     *dma_destination = (unsigned int) dest;
     *dma_count = amount | DMA_16 | DMA_ENABLE;
+}
+void memcpy32_dma(unsigned short* dest, unsigned short* source, int amount) {
+    *dma_source = (unsigned int) source;
+    *dma_destination = (unsigned int) dest;
+    *dma_count = amount | DMA_32 | DMA_ENABLE;
 }
 
 /* function to setup background 0 for this program */
@@ -334,9 +340,10 @@ void sprite_set_offset(struct Sprite* sprite, int offset) {
 void setup_sprite_image() {
     /* load the palette from the image into palette memory*/
     memcpy16_dma((unsigned short*) sprite_palette, (unsigned short*) wall_obstacle_palette, PALETTE_SIZE);
-
+    //memcpy16_dma((unsigned short*) sprite_palette, (unsigned short*) wall_palette, PALETTE_SIZE);
     /* load the image into sprite image memory */
-    memcpy16_dma((unsigned short*) sprite_image_memory, (unsigned short*) wall_obstacle_data, (wall_obstacle_width * wall_obstacle_height));
+    memcpy16_dma((unsigned short*) sprite_image_memory, (unsigned short*) wall_obstacle_data, (wall_obstacle_width * wall_obstacle_height) / 2);
+    //memcpy16_dma((unsigned short*) sprite_image_memory, (unsigned short*) wall_data, (wall_width * wall_height)/2);
 }
 
 /* a struct for the koopa's logic and behavior */
@@ -388,10 +395,10 @@ void koopa_init(struct Koopa* koopa) {
 
 /*initialize the wall*/
 void wall_init(struct Wall* wall){
-    wall->x = 200;
-    wall->y = 113;
+    wall->x = 100;
+    wall->y = 50;
     wall->frame = 0;
-    wall->sprite = sprite_init(wall->x, wall->y, SIZE_32_64, 0, 0, wall->frame, 0);
+    wall->sprite = sprite_init(wall->x, wall->y, SIZE_64_32, 0, 0, wall->frame, 0);
 }
 /* move the koopa left or right returns if it is at edge of the screen */
 int koopa_left(struct Koopa* koopa) {
