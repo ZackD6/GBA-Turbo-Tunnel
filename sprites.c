@@ -9,8 +9,9 @@
 /* include the background image we are using */
 #include "battletoads_pink_bg.h"
 
-/* include the sprite image we are using */
+/* include the sprite images we are using */
 #include "wall_obstacle.h"
+#include "battletoads_main_scooter.h"
 
 /* include the tile map we are using */
 #include "level_road.h"
