@@ -10,6 +10,9 @@
 /* include the image we are using */
 #include "battletoads_pink_bg.h"
 
+/* main scooter sprite*/
+#include "battletoads_main_scooter.h"
+
 /* include the tile map we are using */
 #include "level_wall.h"
 #include "level_road.h"
@@ -57,6 +60,18 @@ volatile unsigned short* sprite_image_memory = (volatile unsigned short*) 0x6010
 volatile unsigned short* bg_palette = (volatile unsigned short*) 0x5000000;
 volatile unsigned short* sprite_palette = (volatile unsigned short*) 0x6010000;
 
+/* sprite palette address*/
+volatile unsigned short* sprite_palette = (volatile unsigned short*) 0x5000200;
+/*sprite image memory location*/
+volatile unsigned short* sprite_image_memory = (volatile unsigned short*) 0x6010000;
+
+/* setup the sprite image and palette */
+void setup_sprite_image(){
+    /* load the palette from the image into palette memory */
+    memcpy16_dma((unsigned short*) sprite_palette, (unsigned short*) battletoads_main_scooter_palette, PALETTE_SIZE);
+    /* load the image into sprite image memory */
+    memcpy16_dma((unsigned short*) sprite_image_memory, (unsigned short*) battletoads_main_scooter_data, (battletoads_main_scooter_width * battletoads_main_scooter_height) /2);
+}
 /* the button register holds the bits which indicate whether each button has
  * been pressed - this has got to be volatile as well
  */
@@ -188,6 +203,15 @@ void setup_background() {
         dest[i] = level_road[i];
     }
 }
+struct Sprite{
+    unsigned short attribute0;
+    unsigned short attribute1;
+    unsigned short attribute2;
+    unsigned short attribute3;
+};
+
+struct Sprite sprites[NUM_SPRITES];
+int next_sprite_index = 0;
 
 
 /* just kill time */
