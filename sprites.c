@@ -336,7 +336,7 @@ void setup_sprite_image() {
     memcpy16_dma((unsigned short*) sprite_palette, (unsigned short*) wall_obstacle_palette, PALETTE_SIZE);
 
     /* load the image into sprite image memory */
-    memcpy16_dma((unsigned short*) sprite_image_memory, (unsigned short*) wall_obstacle_data, (wall_obstacle_width * wall_obstacle_height) / 2);
+    memcpy16_dma((unsigned short*) sprite_image_memory, (unsigned short*) wall_obstacle_data, (wall_obstacle_width * wall_obstacle_height));
 }
 
 /* a struct for the koopa's logic and behavior */
