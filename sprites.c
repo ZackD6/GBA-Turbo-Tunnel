@@ -348,7 +348,7 @@ void sprite_set_offset(struct Sprite* sprite, int offset) {
 //}
 void setup_sprite_image(){
     memcpy16_dma((unsigned short*) sprite_palette, (unsigned short*) spritesheet_palette, PALETTE_SIZE);
-    memcpy16_dma((unsigned short*) sprite_image_memory, (unsigned short*) spritesheet_data, (spritesheet_width * spritesheet_height) / 2);
+    memcpy16_dma((unsigned short*) sprite_image_memory, (unsigned short*) spritesheet_data, (spritesheet_width * spritesheet_height)/2);
 
 }
 
@@ -390,13 +390,13 @@ struct Wall {
 /* initialize the koopa */
 void scooter_init(struct Scooter* scooter) {
     scooter->x = 100;
-    scooter->y = 113;
+    scooter->y = 80;
     scooter->border = 40;
-    scooter->frame = 72;
+    scooter->frame = 128;
     scooter->move = 0;
     scooter->counter = 0;
     scooter->animation_delay = 8;
-    scooter->sprite = sprite_init(scooter->x, scooter->y, SIZE_32_64, 0, 0, scooter->frame, 1);
+    scooter->sprite = sprite_init(scooter->x, scooter->y, SIZE_32_64, 0, 0, 128, 1);
 }
 
 /*initialize the wall*/
