@@ -11,8 +11,8 @@
 
 /* include the sprite images we are using */
 #include "wall_obstacle.h"
-#include "battletoads_main_scooter.h"
-#include "wall.h"
+#include "main_scooter.h"
+//#include "wall.h"
 
 /* include the tile map we are using */
 #include "level_road.h"
@@ -337,17 +337,22 @@ void sprite_set_offset(struct Sprite* sprite, int offset) {
 }
 
 /* setup the sprite image and palette */
-void setup_sprite_image() {
-    /* load the palette from the image into palette memory*/
+void setup_wall_image() {
+     //load the palette from the image into palette memory
     memcpy16_dma((unsigned short*) sprite_palette, (unsigned short*) wall_obstacle_palette, PALETTE_SIZE);
     //memcpy16_dma((unsigned short*) sprite_palette, (unsigned short*) wall_palette, PALETTE_SIZE);
-    /* load the image into sprite image memory */
+     //load the image into sprite image memory 
     memcpy16_dma((unsigned short*) sprite_image_memory, (unsigned short*) wall_obstacle_data, (wall_obstacle_width * wall_obstacle_height) / 2);
     //memcpy16_dma((unsigned short*) sprite_image_memory, (unsigned short*) wall_data, (wall_width * wall_height)/2);
 }
+void setup_scooter_image(){
+    memcpy16_dma((unsigned short*) sprite_palette, (unsigned short*) main_scooter_palette, PALETTE_SIZE);
+    memcpy16_dma((unsigned short*) sprite_image_memory, (unsigned short*) main_scooter_data, (main_scooter_width * main_scooter_height) / 2);
+
+}
 
 /* a struct for the koopa's logic and behavior */
-struct Koopa {
+struct Scooter {
     /* the actual sprite attribute info */
     struct Sprite* sprite;
 
@@ -382,15 +387,15 @@ struct Wall {
 };
 
 /* initialize the koopa */
-void koopa_init(struct Koopa* koopa) {
-    koopa->x = 100;
-    koopa->y = 113;
-    koopa->border = 40;
-    koopa->frame = 0;
-    koopa->move = 0;
-    koopa->counter = 0;
-    koopa->animation_delay = 8;
-    koopa->sprite = sprite_init(koopa->x, koopa->y, SIZE_16_32, 0, 0, koopa->frame, 0);
+void scooter_init(struct Scooter* scooter) {
+    scooter->x = 100;
+    scooter->y = 113;
+    scooter->border = 40;
+    scooter->frame = 0;
+    scooter->move = 0;
+    scooter->counter = 0;
+    scooter->animation_delay = 8;
+    scooter->sprite = sprite_init(scooter->x, scooter->y, SIZE_32_32, 0, 0, scooter->frame, 1);
 }
 
 /*initialize the wall*/
@@ -401,57 +406,57 @@ void wall_init(struct Wall* wall){
     wall->sprite = sprite_init(wall->x, wall->y, SIZE_64_32, 0, 0, wall->frame, 2);
 }
 /* move the koopa left or right returns if it is at edge of the screen */
-int koopa_left(struct Koopa* koopa) {
+int scooter_left(struct Scooter* scooter) {
     /* face left */
-    sprite_set_horizontal_flip(koopa->sprite, 1);
-    koopa->move = 1;
+    sprite_set_horizontal_flip(scooter->sprite, 1);
+    scooter->move = 1;
 
     /* if we are at the left end, just scroll the screen */
-    if (koopa->x < koopa->border) {
+    if (scooter->x < scooter->border) {
         return 1;
     } else {
         /* else move left */
-        koopa->x--;
+        scooter->x--;
         return 0;
     }
 }
-int koopa_right(struct Koopa* koopa) {
+int scooter_right(struct Scooter* scooter) {
     /* face right */
-    sprite_set_horizontal_flip(koopa->sprite, 0);
-    koopa->move = 1;
+    sprite_set_horizontal_flip(scooter->sprite, 0);
+    scooter->move = 1;
 
     /* if we are at the right end, just scroll the screen */
-    if (koopa->x > (SCREEN_WIDTH - 16 - koopa->border)) {
+    if (scooter->x > (SCREEN_WIDTH - 16 - scooter->border)) {
         return 1;
     } else {
         /* else move right */
-        koopa->x++;
+        scooter->x++;
         return 0;
     }
 }
 
-void koopa_stop(struct Koopa* koopa) {
-    koopa->move = 0;
-    koopa->frame = 0;
-    koopa->counter = 7;
-    sprite_set_offset(koopa->sprite, koopa->frame);
+void scooter_stop(struct Scooter* scooter) {
+    scooter->move = 0;
+    scooter->frame = 0;
+    scooter->counter = 7;
+    sprite_set_offset(scooter->sprite, scooter->frame);
 }
 
 /* update the koopa */
-void koopa_update(struct Koopa* koopa) {
-    if (koopa->move) {
-        koopa->counter++;
-        if (koopa->counter >= koopa->animation_delay) {
-            koopa->frame = koopa->frame + 16;
-            if (koopa->frame > 16) {
-                koopa->frame = 0;
+void scooter_update(struct Scooter* scooter) {
+    if (scooter->move) {
+        scooter->counter++;
+        if (scooter->counter >= scooter->animation_delay) {
+            scooter->frame = scooter->frame + 16;
+            if (scooter->frame > 16) {
+                scooter->frame = 0;
             }
-            sprite_set_offset(koopa->sprite, koopa->frame);
-            koopa->counter = 0;
+            sprite_set_offset(scooter->sprite, scooter->frame);
+            scooter->counter = 0;
         }
     }
 
-    sprite_position(koopa->sprite, koopa->x, koopa->y);
+    sprite_position(scooter->sprite, scooter->x, scooter->y);
 }
 
 /* the main function */
@@ -463,12 +468,15 @@ int main() {
     setup_background();
 
     /* setup the sprite image data */
-    setup_sprite_image();
+    setup_wall_image();
+    setup_scooter_image();
 
     /* clear all the sprites on screen now */
     sprite_clear();
 
-
+    //create player
+    struct Scooter player;
+    scooter_init(&player);
     /* create the wall */
     struct Wall wall;
     wall_init(&wall);
@@ -479,20 +487,20 @@ int main() {
     /* loop forever */
     while (1) {
         /* update the koopa */
-        //koopa_update(&koopa);
+        scooter_update(&player);
 
         /* now the arrow keys move the koopa */
-        /*if (button_pressed(BUTTON_RIGHT)) {
-            if (koopa_right(&koopa)) {
+        if (button_pressed(BUTTON_RIGHT)) {
+            if (scooter_right(&player)) {
                 xscroll++;
             }
         } else if (button_pressed(BUTTON_LEFT)) {
-            if (koopa_left(&koopa)) {
+            if (scooter_left(&player)) {
                 xscroll--;
             }
         } else {
-            koopa_stop(&koopa);
-        }*/
+            scooter_stop(&player);
+        }
 
         /* wait for vblank before scrolling and moving sprites */
         wait_vblank();
