@@ -389,13 +389,13 @@ struct Wall {
 /* initialize the koopa */
 void scooter_init(struct Scooter* scooter) {
     scooter->x = 100;
-    scooter->y = 113;
+    scooter->y = 70;
     scooter->border = 40;
-    scooter->frame = 0;
+    scooter->frame = 1;
     scooter->move = 0;
     scooter->counter = 0;
     scooter->animation_delay = 8;
-    scooter->sprite = sprite_init(scooter->x, scooter->y, SIZE_32_32, 0, 0, scooter->frame, 1);
+    scooter->sprite = sprite_init(scooter->x, scooter->y, SIZE_64_32, 0, 0, scooter->frame, 1);
 }
 
 /*initialize the wall*/
@@ -446,14 +446,14 @@ void scooter_stop(struct Scooter* scooter) {
 void scooter_update(struct Scooter* scooter) {
     if (scooter->move) {
         scooter->counter++;
-        if (scooter->counter >= scooter->animation_delay) {
+       /* if (scooter->counter >= scooter->animation_delay) {
             scooter->frame = scooter->frame + 16;
             if (scooter->frame > 16) {
                 scooter->frame = 0;
             }
             sprite_set_offset(scooter->sprite, scooter->frame);
             scooter->counter = 0;
-        }
+        }*/
     }
 
     sprite_position(scooter->sprite, scooter->x, scooter->y);
@@ -468,7 +468,7 @@ int main() {
     setup_background();
 
     /* setup the sprite image data */
-    setup_wall_image();
+   // setup_wall_image();
     setup_scooter_image();
 
     /* clear all the sprites on screen now */
@@ -479,7 +479,7 @@ int main() {
     scooter_init(&player);
     /* create the wall */
     struct Wall wall;
-    wall_init(&wall);
+    //wall_init(&wall);
 
     /* set initial scroll to 0 */
     int xscroll = 0;
