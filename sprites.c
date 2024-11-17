@@ -10,8 +10,9 @@
 #include "battletoads_pink_bg.h"
 
 /* include the sprite images we are using */
-#include "wall_obstacle.h"
-#include "main_scooter.h"
+#include "spritesheet.h"
+//#include "wall_obstacle.h"
+//#include "main_scooter.h"
 //#include "wall.h"
 
 /* include the tile map we are using */
@@ -337,17 +338,17 @@ void sprite_set_offset(struct Sprite* sprite, int offset) {
 }
 
 /* setup the sprite image and palette */
-void setup_wall_image() {
+//void setup_wall_image() {
      //load the palette from the image into palette memory
-    memcpy16_dma((unsigned short*) sprite_palette, (unsigned short*) wall_obstacle_palette, PALETTE_SIZE);
+    //memcpy16_dma((unsigned short*) sprite_palette, (unsigned short*) wall_obstacle_palette, PALETTE_SIZE);
     //memcpy16_dma((unsigned short*) sprite_palette, (unsigned short*) wall_palette, PALETTE_SIZE);
      //load the image into sprite image memory 
-    memcpy16_dma((unsigned short*) sprite_image_memory, (unsigned short*) wall_obstacle_data, (wall_obstacle_width * wall_obstacle_height) / 2);
+    //memcpy16_dma((unsigned short*) sprite_image_memory, (unsigned short*) wall_obstacle_data, (wall_obstacle_width * wall_obstacle_height) / 2);
     //memcpy16_dma((unsigned short*) sprite_image_memory, (unsigned short*) wall_data, (wall_width * wall_height)/2);
-}
-void setup_scooter_image(){
-    memcpy16_dma((unsigned short*) sprite_palette, (unsigned short*) main_scooter_palette, PALETTE_SIZE);
-    memcpy16_dma((unsigned short*) sprite_image_memory, (unsigned short*) main_scooter_data, (main_scooter_width * main_scooter_height) / 2);
+//}
+void setup_sprite_image(){
+    memcpy16_dma((unsigned short*) sprite_palette, (unsigned short*) spritesheet_palette, PALETTE_SIZE);
+    memcpy16_dma((unsigned short*) sprite_image_memory, (unsigned short*) spritesheet_data, (spritesheet_width * spritesheet_height) / 2);
 
 }
 
@@ -391,11 +392,11 @@ void scooter_init(struct Scooter* scooter) {
     scooter->x = 100;
     scooter->y = 113;
     scooter->border = 40;
-    scooter->frame = 0;
+    scooter->frame = 72;
     scooter->move = 0;
     scooter->counter = 0;
     scooter->animation_delay = 8;
-    scooter->sprite = sprite_init(scooter->x, scooter->y, SIZE_32_32, 0, 0, scooter->frame, 1);
+    scooter->sprite = sprite_init(scooter->x, scooter->y, SIZE_32_64, 0, 0, scooter->frame, 1);
 }
 
 /*initialize the wall*/
@@ -446,14 +447,14 @@ void scooter_stop(struct Scooter* scooter) {
 void scooter_update(struct Scooter* scooter) {
     if (scooter->move) {
         scooter->counter++;
-        if (scooter->counter >= scooter->animation_delay) {
+        /*if (scooter->counter >= scooter->animation_delay) {
             scooter->frame = scooter->frame + 16;
             if (scooter->frame > 16) {
                 scooter->frame = 0;
             }
             sprite_set_offset(scooter->sprite, scooter->frame);
             scooter->counter = 0;
-        }
+        }*/
     }
 
     sprite_position(scooter->sprite, scooter->x, scooter->y);
@@ -468,8 +469,8 @@ int main() {
     setup_background();
 
     /* setup the sprite image data */
-    setup_wall_image();
-    setup_scooter_image();
+    //setup_wall_image();
+    setup_sprite_image();
 
     /* clear all the sprites on screen now */
     sprite_clear();
@@ -489,14 +490,14 @@ int main() {
         /* update the koopa */
         scooter_update(&player);
         
-        xscroll++;
+        /*xscroll++;
         wall.x--;
         if(wall.x < 0){
             wall_init(&wall);
-        }
+        }*/
         
         /* now the arrow keys move the koopa */
-        /*if (button_pressed(BUTTON_RIGHT)) {
+        if (button_pressed(BUTTON_RIGHT)) {
             if (scooter_right(&player)) {
                 xscroll++;
             }
@@ -506,7 +507,7 @@ int main() {
             }
         } else {
             scooter_stop(&player);
-        }*/
+        }
 
         /* wait for vblank before scrolling and moving sprites */
         wait_vblank();
