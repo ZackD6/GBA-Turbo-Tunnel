@@ -488,9 +488,15 @@ int main() {
     while (1) {
         /* update the koopa */
         scooter_update(&player);
-
+        
+        xscroll++;
+        wall.x--;
+        if(wall.x < 0){
+            wall_init(&wall);
+        }
+        
         /* now the arrow keys move the koopa */
-        if (button_pressed(BUTTON_RIGHT)) {
+        /*if (button_pressed(BUTTON_RIGHT)) {
             if (scooter_right(&player)) {
                 xscroll++;
             }
@@ -500,7 +506,7 @@ int main() {
             }
         } else {
             scooter_stop(&player);
-        }
+        }*/
 
         /* wait for vblank before scrolling and moving sprites */
         wait_vblank();
