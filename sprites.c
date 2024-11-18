@@ -396,13 +396,13 @@ void scooter_init(struct Scooter* scooter) {
     scooter->move = 0;
     scooter->counter = 0;
     scooter->animation_delay = 8;
-    scooter->sprite = sprite_init(scooter->x, scooter->y, SIZE_32_64, 0, 0, 128, 1);
+    scooter->sprite = sprite_init(scooter->x, scooter->y, SIZE_64_64, 0, 0, 128, 1);
 }
 
 /*initialize the wall*/
-void wall_init(struct Wall* wall){
-    wall->x = 210;
-    wall->y = 88;
+void wall_init(struct Wall* wall, int x, int y){
+    wall->x = x;
+    wall->y = y;
     wall->frame = 0;
     wall->sprite = sprite_init(wall->x, wall->y, SIZE_64_32, 0, 0, wall->frame, 2);
 }
@@ -438,7 +438,7 @@ int scooter_right(struct Scooter* scooter) {
 
 void scooter_stop(struct Scooter* scooter) {
     scooter->move = 0;
-    scooter->frame = 0;
+    scooter->frame = 128;
     scooter->counter = 7;
     sprite_set_offset(scooter->sprite, scooter->frame);
 }
@@ -480,7 +480,8 @@ int main() {
     scooter_init(&player);
     /* create the wall */
     struct Wall wall;
-    wall_init(&wall);
+    wall_init(&wall, 210, 88);
+    short wall_counter = 0;
 
     /* set initial scroll to 0 */
     int xscroll = 0;
@@ -493,7 +494,21 @@ int main() {
         /*xscroll++;
         wall.x--;
         if(wall.x < 0){
-            wall_init(&wall);
+            if(wall_counter < 2){
+                wall_counter++
+            }
+            else{
+                wall_counter = 0;
+            }
+            if(wall_counter == 0){
+                wall_init(&wall, 210, 88}
+            }
+            if(wall_counter == 1){
+                wall_init(&wall, 210, 98);
+            }
+            if(wall_counter == 2){
+                wall_init(&wall, 210, 88);
+            }
         }*/
         
         /* now the arrow keys move the koopa */
