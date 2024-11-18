@@ -387,8 +387,14 @@ struct Wall {
     int frame;
 };
 
+struct Swall {
+    struct Sprite* sprite;
+    int x, y;
+    int frame;
+};
+
 /* initialize the koopa */
-void scooter_init(struct Scooter* scooter) {
+void scooter_init(struct Scooter* scooter){
     scooter->x = 100;
     scooter->y = 80;
     scooter->border = 40;
@@ -405,6 +411,13 @@ void wall_init(struct Wall* wall, int x, int y){
     wall->y = y;
     wall->frame = 0;
     wall->sprite = sprite_init(wall->x, wall->y, SIZE_64_32, 0, 0, wall->frame, 2);
+}
+
+void Swall_init(struct Swall* swall, int x, int y){
+    swall->x = x;
+    swall->y = y;
+    swall->frame = 384;
+    swall->sprite = sprite_init(swall->x, swall->y, SIZE_16_16, 0, 0, swall->frame, 1);
 }
 /* move the koopa left or right returns if it is at edge of the screen */
 int scooter_left(struct Scooter* scooter) {
@@ -480,6 +493,7 @@ int main() {
     scooter_init(&player);
     /* create the wall */
     struct Wall wall;
+    struct Swall swall;
     wall_init(&wall, 210, 88);
     short wall_counter = 0;
 
@@ -507,7 +521,8 @@ int main() {
                 wall_init(&wall, 210, 98);
             }
             if(wall_counter == 2){
-                wall_init(&wall, 210, 88);
+                swall_init(&swall, 210, 88);
+                swall_init(&swall, 210, 98);
             }
         }*/
         
