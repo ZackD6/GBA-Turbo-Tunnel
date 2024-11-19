@@ -420,8 +420,8 @@ void wall_init(struct Wall* wall, int x, int y){
 void swall_init(struct Swall* swall, int x, int y){
     swall->x = x;
     swall->y = y;
-    swall->frame = 384;
-    swall->sprite = sprite_init(swall->x, swall->y, SIZE_16_16, 0, 0, swall->frame, 1);
+    swall->frame = 256;
+    swall->sprite = sprite_init(swall->x, swall->y, SIZE_64_32, 0, 0, swall->frame, 1);
 }
 /* move the koopa left or right returns if it is at edge of the screen */
 int scooter_left(struct Scooter* scooter) {
@@ -482,6 +482,11 @@ void wall_update(struct Wall* wall){
     sprite_position(wall->sprite, wall->x, wall->y);
 }
 
+void swall_update(struct Swall* swall){
+    swall->x--;
+    sprite_position(swall->sprite, swall->x, swall->y);
+}
+
 /* the main function */
 int main() {
     /* we set the mode to mode 0 with bg0 on */
@@ -502,10 +507,14 @@ int main() {
     scooter_init(&player);
     /* create the wall */
     struct Wall wall;
-    struct Swall swall;
+    struct Swall swall1;
+    struct Swall swall2;
     //struct Swall swall;
-    wall_init(&wall, 210, 94);
+    wall_init(&wall, 300, 94);
+    swall_init(&swall1, 300, 94);
+    swall_init(&swall2, 300, 116);
     short wall_counter = 0;
+    short use_swall = 0;
 
     /* set initial scroll to 0 */
     int xscroll = 0;
@@ -514,36 +523,50 @@ int main() {
     while (1) {
         /* update the koopa */
         scooter_update(&player);
-        wall_update(&wall);        
+        if(use_swall == 1){
+            swall_update(&swall1);
+            swall_update(&swall2); 
+        }
+        else{
+            wall_update(&wall);
+        }
 
         xscroll++;
-        wall.x--;
+        //swall1.x--;
+        //swall2.x--;
+        /*if(use_swall == 1){
+            swall1.x--;
+            swall2.x--;
+        }
+        else{
+            wall.x--;
+        }*/
 
-        if(wall.x < -20){
-            /*struct Wall wall;
-            wall_init(&wall, 210, 98);*/
+        if(wall.x < -20 || swall1.x < -20){
             wall.x = 300;
-            if(wall.y == 94){
+            swall1.x = 300;
+            swall2.x = 300;
+            if(wall_counter >= 3){
+                wall_counter = 0;
+            }
+            else{
+                wall_counter++;
+            }
+            if(wall_counter == 1){
+                use_swall = 0;
                 wall.y = 112;
             }
             else{
-                wall.y = 94;
+                if(wall_counter == 2){
+                    use_swall = 1; 
+                }
+                else{
+                    use_swall = 0;
+                    wall.y = 94;
+                }
             }
         }
-        /*if(wall.x < 0){
-            if(wall_counter < 1){
-                wall_counter++;
-            }
-            else{
-                wall_counter = 0;
-            }
-            if(wall_counter == 0){
-                free(&wall)
-            }
-            if(wall_counter == 1){
-                free(&wall)
-            } 
-        }*/
+        
         
         /* now the arrow keys move the koopa */
         if (button_pressed(BUTTON_RIGHT)) {
