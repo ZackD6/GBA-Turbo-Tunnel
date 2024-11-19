@@ -505,7 +505,7 @@ int main() {
         /* update the koopa */
         scooter_update(&player);
         
-        /*xscroll++;
+        xscroll++;
         wall.x--;
         if(wall.x < 0){
             if(wall_counter < 2){
@@ -524,7 +524,7 @@ int main() {
                 swall_init(&swall, 210, 88);
                 swall_init(&swall, 210, 98);
             }
-        }*/
+        }
         
         /* now the arrow keys move the koopa */
         if (button_pressed(BUTTON_RIGHT)) {
