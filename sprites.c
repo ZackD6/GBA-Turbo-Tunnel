@@ -3,6 +3,8 @@
  * program which demonstrates GBA sprites
  */
 
+#include <stdlib.h>
+
 #define SCREEN_WIDTH 240
 #define SCREEN_HEIGHT 160
 
@@ -67,6 +69,8 @@ volatile unsigned short* buttons = (volatile unsigned short*) 0x04000130;
 /* scrolling registers for backgrounds */
 volatile short* bg0_x_scroll = (unsigned short*) 0x4000010;
 volatile short* bg0_y_scroll = (unsigned short*) 0x4000012;
+
+volatile short* bg1_x_scroll = (unsigned short*) 0x4000014;
 
 /* the bit positions indicate each button - the first bit is for A, second for
  * B, and so on, each constant below can be ANDED into the register to get the
@@ -413,7 +417,7 @@ void wall_init(struct Wall* wall, int x, int y){
     wall->sprite = sprite_init(wall->x, wall->y, SIZE_64_32, 0, 0, wall->frame, 2);
 }
 
-void Swall_init(struct Swall* swall, int x, int y){
+void swall_init(struct Swall* swall, int x, int y){
     swall->x = x;
     swall->y = y;
     swall->frame = 384;
@@ -473,6 +477,11 @@ void scooter_update(struct Scooter* scooter) {
     sprite_position(scooter->sprite, scooter->x, scooter->y);
 }
 
+void wall_update(struct Wall* wall){
+    wall->x--;
+    sprite_position(wall->sprite, wall->x, wall->y);
+}
+
 /* the main function */
 int main() {
     /* we set the mode to mode 0 with bg0 on */
@@ -494,7 +503,8 @@ int main() {
     /* create the wall */
     struct Wall wall;
     struct Swall swall;
-    wall_init(&wall, 210, 88);
+    //struct Swall swall;
+    wall_init(&wall, 210, 94);
     short wall_counter = 0;
 
     /* set initial scroll to 0 */
@@ -504,27 +514,36 @@ int main() {
     while (1) {
         /* update the koopa */
         scooter_update(&player);
-        
+        wall_update(&wall);        
+
         xscroll++;
         wall.x--;
-        if(wall.x < 0){
-            if(wall_counter < 2){
-                wall_counter++
+
+        if(wall.x < -20){
+            /*struct Wall wall;
+            wall_init(&wall, 210, 98);*/
+            wall.x = 300;
+            if(wall.y == 94){
+                wall.y = 112;
+            }
+            else{
+                wall.y = 94;
+            }
+        }
+        /*if(wall.x < 0){
+            if(wall_counter < 1){
+                wall_counter++;
             }
             else{
                 wall_counter = 0;
             }
             if(wall_counter == 0){
-                wall_init(&wall, 210, 88}
+                free(&wall)
             }
             if(wall_counter == 1){
-                wall_init(&wall, 210, 98);
-            }
-            if(wall_counter == 2){
-                swall_init(&swall, 210, 88);
-                swall_init(&swall, 210, 98);
-            }
-        }
+                free(&wall)
+            } 
+        }*/
         
         /* now the arrow keys move the koopa */
         if (button_pressed(BUTTON_RIGHT)) {
@@ -542,6 +561,7 @@ int main() {
         /* wait for vblank before scrolling and moving sprites */
         wait_vblank();
         *bg0_x_scroll = xscroll;
+        *bg1_x_scroll = xscroll;
         sprite_update_all();
 
         /* delay some */
