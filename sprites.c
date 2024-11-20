@@ -492,6 +492,8 @@ void swall_update(struct Swall* swall){
     sprite_position(swall->sprite, swall->x, swall->y);
 }
 
+int gt3(int a);
+
 /* the main function */
 int main() {
     /* we set the mode to mode 0 with bg0 on */
@@ -551,12 +553,13 @@ int main() {
             wall.x = 300;
             swall1.x = 300;
             swall2.x = 300;
-            if(wall_counter >= 3){
+            /*if(wall_counter >= 3){
                 wall_counter = 0;
             }
             else{
                 wall_counter++;
-            }
+            }*/
+            wall_counter = gt3(wall_counter);
             if(wall_counter == 1){
                 use_swall = 0;
                 wall.y = 112;
