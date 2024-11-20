@@ -514,9 +514,16 @@ void swall_update(struct Swall* swall){
     swall->x--;
     sprite_position(swall->sprite, swall->x, swall->y);
 }
-void check_collision(struct Scooter* scooter, struct Swall* swall, struct Wall* wall){
+void check_collision(struct Scooter* scooter, struct Swall* swall1, struct Swall* swall2,  struct Wall* wall){
     if((scooter->y >= wall->y-15 && scooter->y <= wall->y+15) && (scooter->x <= wall->x+15 && scooter->x >= wall->x-15)){
         if(wall->x > -20){       
+            scooter->x--;
+            scooter->x--;
+        }
+
+    }
+    if((scooter->y >= swall1->y -15 || scooter->y >= swall2->y - 15) && (scooter->y <= swall1->y + 15 || scooter->y <= swall2->y +15) && (scooter->x >= swall1->x -10 || scooter->x >= swall2->x -10) && (scooter->x <= swall1->x +10 || scooter->x <= swall2->x +10)){
+        if(swall1->x > -20){
             scooter->x--;
             scooter->x--;
         }
@@ -631,7 +638,7 @@ int main() {
         *bg0_x_scroll = xscroll;
         *bg1_x_scroll = xscroll;
         sprite_update_all();
-        check_collision(&player, &swall1, &wall);
+        check_collision(&player, &swall1, &swall2, &wall);
 
         /* delay some */
         delay(100);
