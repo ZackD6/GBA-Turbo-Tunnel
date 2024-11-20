@@ -401,7 +401,7 @@ struct Swall {
 void scooter_init(struct Scooter* scooter){
     scooter->x = 100;
     scooter->y = 80;
-    scooter->border = 40;
+    scooter->border = 5;
     scooter->frame = 128;
     scooter->move = 0;
     scooter->counter = 0;
@@ -424,34 +424,39 @@ void swall_init(struct Swall* swall, int x, int y){
     swall->sprite = sprite_init(swall->x, swall->y, SIZE_64_32, 0, 0, swall->frame, 1);
 }
 /* move the koopa left or right returns if it is at edge of the screen */
-int scooter_left(struct Scooter* scooter) {
+void scooter_left(struct Scooter* scooter) {
     /* face left */
-    sprite_set_horizontal_flip(scooter->sprite, 1);
+    //sprite_set_horizontal_flip(scooter->sprite, 1);
     scooter->move = 1;
 
     /* if we are at the left end, just scroll the screen */
-    if (scooter->x < scooter->border) {
-        return 1;
-    } else {
-        /* else move left */
+    if (scooter->x > scooter->border) {
         scooter->x--;
-        return 0;
     }
 }
-int scooter_right(struct Scooter* scooter) {
+void scooter_right(struct Scooter* scooter) {
     /* face right */
     sprite_set_horizontal_flip(scooter->sprite, 0);
     scooter->move = 1;
 
     /* if we are at the right end, just scroll the screen */
-    if (scooter->x > (SCREEN_WIDTH - 16 - scooter->border)) {
-        return 1;
-    } else {
-        /* else move right */
+    if (!(scooter->x > (SCREEN_WIDTH - 16 - scooter->border))) {
         scooter->x++;
-        return 0;
     }
 }
+void scooter_up(struct Scooter* scooter){
+    scooter->move =1;
+    if(scooter->y>80){
+        scooter->y--;
+    }
+}
+void scooter_down(struct Scooter* scooter){
+    scooter->move = 1;
+    if(scooter->y < 120){
+        scooter->y++;
+    }
+}
+
 
 void scooter_stop(struct Scooter* scooter) {
     scooter->move = 0;
@@ -570,14 +575,15 @@ int main() {
         
         /* now the arrow keys move the koopa */
         if (button_pressed(BUTTON_RIGHT)) {
-            if (scooter_right(&player)) {
-                xscroll++;
-            }
+            scooter_right(&player);
         } else if (button_pressed(BUTTON_LEFT)) {
-            if (scooter_left(&player)) {
-                xscroll--;
-            }
-        } else {
+            scooter_left(&player);
+        } else if (button_pressed(BUTTON_UP)){
+            scooter_up(&player);
+        } else if (button_pressed(BUTTON_DOWN)){
+            scooter_down(&player);
+        }
+        else {
             scooter_stop(&player);
         }
 
