@@ -378,6 +378,12 @@ struct Scooter {
 
     /* the number of pixels away from the edge of the screen the koopa stays */
     int border;
+    
+    int yvel;
+
+    int gravity;
+
+    int falling;
 };
 
 struct Wall {
@@ -406,6 +412,9 @@ void scooter_init(struct Scooter* scooter){
     scooter->move = 0;
     scooter->counter = 0;
     scooter->animation_delay = 8;
+    scooter->falling = 0;
+    scooter->yvel = 0;
+    scooter->gravity = 35;
     scooter->sprite = sprite_init(scooter->x, scooter->y, SIZE_64_64, 0, 0, 128, 1);
 }
 
@@ -464,9 +473,23 @@ void scooter_stop(struct Scooter* scooter) {
     scooter->counter = 7;
     sprite_set_offset(scooter->sprite, scooter->frame);
 }
+void scooter_jump(struct Scooter* scooter){
+    if(!scooter->falling){
+        scooter->yvel = -850;
+        scooter->falling = 1;
+    }
+}
 
 /* update the koopa */
 void scooter_update(struct Scooter* scooter) {
+    if(scooter->falling){
+        scooter->y += (scooter->yvel >> 8);
+        scooter->yvel += scooter->gravity;
+        if(scooter->y <= 92 && scooter->y >=88){
+            scooter->falling = 0;
+            scooter->yvel=0;
+        }
+    }
     if (scooter->move) {
         scooter->counter++;
         /*if (scooter->counter >= scooter->animation_delay) {
@@ -596,6 +619,8 @@ int main() {
             scooter_up(&player);
         } else if (button_pressed(BUTTON_DOWN)){
             scooter_down(&player);
+        } else if (button_pressed(BUTTON_A)){
+            scooter_jump(&player);
         }
         else {
             scooter_stop(&player);
