@@ -491,6 +491,17 @@ void swall_update(struct Swall* swall){
     swall->x--;
     sprite_position(swall->sprite, swall->x, swall->y);
 }
+void check_collision(struct Scooter* scooter, struct Swall* swall, struct Wall* wall){
+    if((scooter->y >= wall->y-15 && scooter->y <= wall->y+15) && (scooter->x <= wall->x+15 && scooter->x >= wall->x-15)){
+        if(wall->x > -20){       
+            scooter->x--;
+            scooter->x--;
+        }
+    }
+  //  if(scooter->y == swall->y){
+    //    scooter->x = swall->x;
+   // } 
+}
 
 int gt3(int a);
 
@@ -574,7 +585,7 @@ int main() {
                 }
             }
         }
-        
+       // check_collision(&player, &swall2, &wall);
         
         /* now the arrow keys move the koopa */
         if (button_pressed(BUTTON_RIGHT)) {
@@ -595,6 +606,7 @@ int main() {
         *bg0_x_scroll = xscroll;
         *bg1_x_scroll = xscroll;
         sprite_update_all();
+        check_collision(&player, &swall1, &wall);
 
         /* delay some */
         delay(100);
