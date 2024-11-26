@@ -514,8 +514,11 @@ void swall_update(struct Swall* swall){
     swall->x--;
     sprite_position(swall->sprite, swall->x, swall->y);
 }
+
+int wallCheck(int a, int b);
+
 void check_collision(struct Scooter* scooter, struct Swall* swall1, struct Swall* swall2,  struct Wall* wall){
-    if((scooter->y >= wall->y-15 && scooter->y <= wall->y+15) && (scooter->x <= wall->x+15 && scooter->x >= wall->x-15)){
+    if((wallCheck(scooter->y, wall->y)) && (wallCheck(scooter->x, wall->x))){
         if(wall->x > -20){       
             scooter->x--;
             scooter->x--;
